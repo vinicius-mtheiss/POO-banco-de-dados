@@ -16,15 +16,38 @@ public class CarrinhoServices {
         pedido = new Pedido();
     }
 
-
-
-
     public void adicionarProduto(Produto produto) {
+
         pedido.adicionarProduto(produto);
+
     }
 
     public void removerProduto(Produto produto) {
+
         pedido.removerProduto(produto);
+
     }
+
+    public Pedido finalizarPedido(Cliente cliente) {
+
+        if (pedido.getListaProdutos().isEmpty()) {
+            throw new RuntimeException("Carrinho vazio!");
+        }
+
+
+        pedido.setCliente(cliente);
+        pedido.setData(LocalDate.now());
+        pedido.setStatus("Pendente");
+
+
+        Pedido pedidoFinalizado = pedido;
+
+
+        pedido = new Pedido();
+
+
+        return pedidoFinalizado;
+    }
+
 
 }
