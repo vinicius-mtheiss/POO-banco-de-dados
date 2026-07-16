@@ -40,6 +40,9 @@ Scanner scan = new Scanner(System.in);
 					System.out.print("Preço: ");
 					novo.setPreco(sc.nextDouble());
 
+					System.out.print("Quantidade: ");
+					novo.setQuantidade(sc.nextInt());
+
 					dao.salvar(novo);
 
 					System.out.println("Produto cadastrado com ID: " + novo.getId());
@@ -57,6 +60,7 @@ Scanner scan = new Scanner(System.in);
 						System.out.println("ID: " + p.getId());
 						System.out.println("Descrição: " + p.getDescricao());
 						System.out.println("Preço: R$ " + p.getPreco());
+						System.out.println("Quantidade: " + p.getQuantidade());
 					} else {
 						System.out.println("Produto não encontrado.");
 					}
@@ -78,6 +82,7 @@ Scanner scan = new Scanner(System.in);
 							System.out.println("ID: " + prod.getId());
 							System.out.println("Descrição: " + prod.getDescricao());
 							System.out.println("Preço: R$ " + prod.getPreco());
+							System.out.println("Quantidade: " + prod.getQuantidade());
 						}
 					}
 
@@ -98,6 +103,9 @@ Scanner scan = new Scanner(System.in);
 
 						System.out.print("Novo preço: ");
 						alterar.setPreco(sc.nextDouble());
+
+						System.out.print("Novo quantidade: ");
+						alterar.setQuantidade(sc.nextInt());
 
 						dao.alterar(alterar);
 

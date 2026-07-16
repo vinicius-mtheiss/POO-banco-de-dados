@@ -16,13 +16,14 @@ public class ProdutoDao implements ICRUD {
 
 	@Override
 	public Produto salvar(Produto prod) {
-		String sql = "insert into produto(descricao, preco)values(?,?)";
+		String sql = "insert into produto(descricao, preco, quantidade)values(?,?,?)";
 		
 		Connection con = ConectaDB.conectar();
 		try {
 			PreparedStatement stm = con.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			stm.setString(1, prod.getDescricao());
 			stm.setDouble(2, prod.getPreco());
+			stm.setInt(3, prod.getQuantidade());
 			stm.execute();
 			
 			ResultSet rs = stm.getGeneratedKeys();
@@ -59,21 +60,26 @@ public class ProdutoDao implements ICRUD {
 
 	@Override
 	public void alterar(Produto prod) {
-        String sql = "update produto set descricao = ?, preco = ? where id = ?";
-		
+		String sql = "UPDATE produto SET descricao = ?, preco = ?, quantidade = ? WHERE id = ?";
+
 		Connection con = ConectaDB.conectar();
+
 		try {
 			PreparedStatement stm = con.prepareStatement(sql);
+
 			stm.setString(1, prod.getDescricao());
 			stm.setDouble(2, prod.getPreco());
-			stm.setInt(3, prod.getId());
-			stm.execute();			
-			
+			stm.setInt(3, prod.getQuantidade());
+			stm.setInt(4, prod.getId());
+
+			stm.executeUpdate();
+
 			stm.close();
-			con.close();			
+			con.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
 
 	@Override
@@ -85,7 +91,7 @@ public class ProdutoDao implements ICRUD {
 			stm.setInt(1, id);
 			ResultSet rs = stm.executeQuery();
 			if(rs.next()) {				
-				produto = new Produto(rs.getInt(1),rs.getString(2),rs.getDouble(3));			
+				produto = new Produto(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getInt(4));
 			}
 			rs.close();
 			stm.close();
@@ -104,7 +110,7 @@ public class ProdutoDao implements ICRUD {
 			PreparedStatement stm = con.prepareStatement("select * from produto");
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {				
-				Produto p = new Produto(rs.getInt(1),rs.getString(2),rs.getDouble(3));
+				Produto p = new Produto(rs.getInt(1),rs.getString(2),rs.getDouble(3),rs.getInt(4));
 				produtos.add(p);
 			}
 			rs.close();
