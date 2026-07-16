@@ -17,10 +17,14 @@ public class CarrinhoServices {
     }
 
 
+
+
     public void adicionarProduto(Produto produto) {
         pedido.adicionarProduto(produto);
     }
 
-
+    public void removerProduto(Produto produto) {
+        pedido.removerProduto(produto);
+    }
 
 }
