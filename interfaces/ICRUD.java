@@ -2,13 +2,16 @@ package interfaces;
 
 import java.util.List;
 
-import modelos.Produto;
+public interface ICRUD<T> {
 
+	T salvar(T obj);
 
-public interface ICRUD {
-	Produto salvar(Produto prod);
 	void deletar(int id);
-	void alterar(Produto prod);
-	Produto consultar(int id);
-	List<Produto> consultar();
+
+	void alterar(T obj);
+
+	T consultar(int id);
+
+	List<T> consultar();
+
 }

@@ -1,150 +1,334 @@
-import java.util.List;
-import java.util.Scanner;
-
+import dao.ClienteDao;
 import dao.ProdutoDao;
+import modelos.Cliente;
 import modelos.Produto;
 
-import static utils.ConectaDB.conectar;
-
+import java.util.Scanner;
 
 public class Main {
-Scanner scan = new Scanner(System.in);
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+
+		Scanner scan = new Scanner(System.in);
+
+		int opcao;
+
+		do {
+
+			System.out.println("\n===== SISTEMA =====");
+			System.out.println("1 - Gerenciar Produtos");
+			System.out.println("2 - Gerenciar Clientes");
+			System.out.println("0 - Sair");
+			System.out.print("Escolha uma opção: ");
+
+			opcao = scan.nextInt();
+
+			switch(opcao) {
+
+				case 1:
+					menuProduto();
+					break;
+
+				case 2:
+					menuCliente();
+					break;
+
+				case 0:
+					System.out.println("Sistema encerrado!");
+					break;
+
+				default:
+					System.out.println("Opção inválida!");
+
+			}
+
+		} while(opcao != 0);
+
+
+		scan.close();
+	}
+
+
+	public static void menuProduto() {
+
+		Scanner scan = new Scanner(System.in);
+
 		ProdutoDao dao = new ProdutoDao();
 
 		int opcao;
 
 		do {
-			System.out.println("\n========== MENU ==========");
+
+			System.out.println("\n===== MENU PRODUTO =====");
 			System.out.println("1 - Cadastrar produto");
-			System.out.println("2 - Consultar produto por ID");
-			System.out.println("3 - Listar produtos");
-			System.out.println("4 - Alterar produto");
-			System.out.println("5 - Excluir produto");
-			System.out.println("0 - Sair");
-			System.out.print("Opção: ");
+			System.out.println("2 - Alterar produto");
+			System.out.println("3 - Excluir produto");
+			System.out.println("4 - Consultar produto");
+			System.out.println("5 - Listar produtos");
+			System.out.println("0 - Voltar");
 
-			opcao = sc.nextInt();
-			sc.nextLine();
+			System.out.print("Escolha: ");
 
-			switch (opcao) {
+			opcao = scan.nextInt();
+			scan.nextLine();
+
+
+			switch(opcao) {
 
 				case 1:
-					Produto novo = new Produto();
+					Produto p = new Produto();
 
 					System.out.print("Descrição: ");
-					novo.setDescricao(sc.nextLine());
+					p.setDescricao(scan.nextLine());
 
 					System.out.print("Preço: ");
-					novo.setPreco(sc.nextDouble());
+					p.setPreco(scan.nextDouble());
 
 					System.out.print("Quantidade: ");
-					novo.setQuantidade(sc.nextInt());
+					p.setQuantidade(scan.nextInt());
 
-					dao.salvar(novo);
 
-					System.out.println("Produto cadastrado com ID: " + novo.getId());
+					dao.salvar(p);
+
+					System.out.println("Produto cadastrado!");
 					break;
+
 
 				case 2:
+					System.out.print("ID do produto: ");
+					int id = scan.nextInt();
 
-					System.out.print("Informe o ID: ");
-					int id = sc.nextInt();
+					Produto produto = dao.consultar(id);
 
-					Produto p = dao.consultar(id);
+					if(produto != null) {
 
-					if (p != null) {
-						System.out.println("\nProduto encontrado:");
-						System.out.println("ID: " + p.getId());
-						System.out.println("Descrição: " + p.getDescricao());
-						System.out.println("Preço: R$ " + p.getPreco());
-						System.out.println("Quantidade: " + p.getQuantidade());
-					} else {
-						System.out.println("Produto não encontrado.");
-					}
-
-					break;
-
-				case 3:
-
-					List<Produto> lista = dao.consultar();
-
-					if (lista.isEmpty()) {
-						System.out.println("Nenhum produto cadastrado.");
-					} else {
-
-						System.out.println("\nLista de Produtos");
-
-						for (Produto prod : lista) {
-							System.out.println("---------------------------");
-							System.out.println("ID: " + prod.getId());
-							System.out.println("Descrição: " + prod.getDescricao());
-							System.out.println("Preço: R$ " + prod.getPreco());
-							System.out.println("Quantidade: " + prod.getQuantidade());
-						}
-					}
-
-					break;
-
-				case 4:
-
-					System.out.print("Informe o ID do produto: ");
-					int idAlterar = sc.nextInt();
-					sc.nextLine();
-
-					Produto alterar = dao.consultar(idAlterar);
-
-					if (alterar != null) {
+						scan.nextLine();
 
 						System.out.print("Nova descrição: ");
-						alterar.setDescricao(sc.nextLine());
+						produto.setDescricao(scan.nextLine());
 
 						System.out.print("Novo preço: ");
-						alterar.setPreco(sc.nextDouble());
+						produto.setPreco(scan.nextDouble());
 
-						System.out.print("Novo quantidade: ");
-						alterar.setQuantidade(sc.nextInt());
+						System.out.print("Nova quantidade: ");
+						produto.setQuantidade(scan.nextInt());
 
-						dao.alterar(alterar);
 
-						System.out.println("Produto alterado com sucesso.");
+						dao.alterar(produto);
+
+						System.out.println("Produto alterado!");
 
 					} else {
-						System.out.println("Produto não encontrado.");
+						System.out.println("Produto não encontrado!");
 					}
 
 					break;
+
+
+				case 3:
+					System.out.print("ID do produto: ");
+					int idExcluir = scan.nextInt();
+
+					dao.deletar(idExcluir);
+
+					System.out.println("Produto excluído!");
+					break;
+
+
+				case 4:
+					System.out.print("ID do produto: ");
+					int idConsulta = scan.nextInt();
+
+					Produto prod = dao.consultar(idConsulta);
+
+					if(prod != null)
+						System.out.println(prod);
+					else
+						System.out.println("Produto não encontrado!");
+
+					break;
+
 
 				case 5:
 
-					System.out.print("Informe o ID do produto: ");
-					int idExcluir = sc.nextInt();
-
-					Produto excluir = dao.consultar(idExcluir);
-
-					if (excluir != null) {
-						dao.deletar(idExcluir);
-						System.out.println("Produto excluído com sucesso.");
-					} else {
-						System.out.println("Produto não encontrado.");
+					for(Produto produtoLista : dao.consultar()) {
+						System.out.println(produtoLista);
 					}
 
 					break;
 
+
 				case 0:
-					System.out.println("Programa encerrado.");
 					break;
 
+
 				default:
-					System.out.println("Opção inválida.");
+					System.out.println("Opção inválida!");
 			}
 
-		} while (opcao != 0);
 
-		sc.close();
+		} while(opcao != 0);
+
+	}
+
+
+
+	public static void menuCliente() {
+
+		Scanner scan = new Scanner(System.in);
+
+		ClienteDao dao = new ClienteDao();
+
+		int opcao;
+
+
+		do {
+
+			System.out.println("\n===== MENU CLIENTE =====");
+			System.out.println("1 - Cadastrar cliente");
+			System.out.println("2 - Alterar cliente");
+			System.out.println("3 - Excluir cliente");
+			System.out.println("4 - Consultar cliente");
+			System.out.println("5 - Listar clientes");
+			System.out.println("0 - Voltar");
+
+
+			System.out.print("Escolha: ");
+
+			opcao = scan.nextInt();
+			scan.nextLine();
+
+
+			switch(opcao) {
+
+
+				case 1:
+
+					Cliente c = new Cliente();
+
+
+					System.out.print("CPF: ");
+					c.setCpf(scan.nextLine());
+
+					System.out.print("Nome: ");
+					c.setNome(scan.nextLine());
+
+					System.out.print("Email: ");
+					c.setEmail(scan.nextLine());
+
+					System.out.print("Rua: ");
+					c.setRua(scan.nextLine());
+
+					System.out.print("Número: ");
+					c.setNumero(scan.nextInt());
+					scan.nextLine();
+
+					System.out.print("Bairro: ");
+					c.setBairro(scan.nextLine());
+
+					System.out.print("CEP: ");
+					c.setCep(scan.nextLine());
+
+					System.out.print("Cidade: ");
+					c.setCidade(scan.nextLine());
+
+					System.out.print("Estado: ");
+					c.setEstado(scan.nextLine());
+
+
+					dao.salvar(c);
+
+					System.out.println("Cliente cadastrado!");
+
+					break;
+
+
+
+				case 2:
+
+					System.out.print("ID do cliente: ");
+
+					int id = scan.nextInt();
+
+					Cliente cliente = dao.consultar(id);
+
+
+					if(cliente != null) {
+
+						scan.nextLine();
+
+						System.out.print("Nome: ");
+						cliente.setNome(scan.nextLine());
+
+						System.out.print("Email: ");
+						cliente.setEmail(scan.nextLine());
+
+
+						dao.alterar(cliente);
+
+						System.out.println("Cliente alterado!");
+
+					} else {
+						System.out.println("Cliente não encontrado!");
+					}
+
+					break;
+
+
+
+				case 3:
+
+					System.out.print("ID do cliente: ");
+
+					int idExcluir = scan.nextInt();
+
+					dao.deletar(idExcluir);
+
+					System.out.println("Cliente excluído!");
+
+					break;
+
+
+
+				case 4:
+
+					System.out.print("ID do cliente: ");
+
+					int idConsulta = scan.nextInt();
+
+					Cliente clienteConsulta = dao.consultar(idConsulta);
+
+
+					if(clienteConsulta != null)
+						System.out.println(clienteConsulta);
+					else
+						System.out.println("Cliente não encontrado!");
+
+					break;
+
+
+
+				case 5:
+
+					for(Cliente clienteLista : dao.consultar()) {
+						System.out.println(clienteLista);
+					}
+
+					break;
+
+
+
+				case 0:
+					break;
+
+
+				default:
+					System.out.println("Opção inválida!");
+
+			}
+
+
+		} while(opcao != 0);
+
 	}
 }
-
-
