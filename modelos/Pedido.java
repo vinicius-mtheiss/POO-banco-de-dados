@@ -92,7 +92,7 @@ public class Pedido {
 
         return "Pedido{" +
                 "id=" + id +
-                ", cliente=" + cliente.getNome() +
+                ", cliente=" + (cliente != null ? cliente.getNome() : "Não selecionado") +
                 ", data=" + data +
                 ", status='" + status + '\'' +
                 ", produtos=" + listaProdutos +

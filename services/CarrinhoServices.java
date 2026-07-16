@@ -28,6 +28,16 @@ public class CarrinhoServices {
 
     }
 
+    public Pedido visualizarCarrinho() {
+        return pedido;
+    }
+
+    public void definirCliente(Cliente cliente){
+
+        pedido.setCliente(cliente);
+
+    }
+
     public Pedido finalizarPedido(Cliente cliente) {
 
         if (pedido.getListaProdutos().isEmpty()) {
