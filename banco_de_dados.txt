@@ -40,5 +40,3 @@ CREATE TABLE pedido_produto (
     FOREIGN KEY (id_pedido) REFERENCES pedido(id),
     FOREIGN KEY (id_produto) REFERENCES produto(id)
 );
-
-select * from pedido_produto;
